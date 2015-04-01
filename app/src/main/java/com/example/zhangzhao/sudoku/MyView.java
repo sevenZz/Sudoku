@@ -1,10 +1,14 @@
 package com.example.zhangzhao.sudoku;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by zhangzhao on 2015/3/30.
@@ -19,6 +23,7 @@ public class MyView extends View{
     public MyView(Context context) {
         super(context);
     }
+
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -46,12 +51,17 @@ public class MyView extends View{
         Paint lightPaint = new Paint();
         lightPaint.setColor(getResources().getColor(R.color.sudoku_light));
         for(int i = 0; i < 9; i++){
-            //以下两行，画横纵各8条线。先画浅色，再挨着画深一点，达到立体效果。
+            //以下四行，画横纵各8条线。先画浅色，再挨着画深一点，达到立体效果。
             canvas.drawLine(0, i*height, getWidth(), i*height, lightPaint);
             canvas.drawLine(0, i*height+1, getWidth(), i*height+1,hilitePaint);
-            //画横纵各2条线，深颜色。
             canvas.drawLine(i*width, 0, i*width, getHeight(), lightPaint);
             canvas.drawLine(i*width+1,0,i*width+1,getHeight(),hilitePaint);
+            if (i % 3 == 0){
+                canvas.drawLine(0, i*height, getWidth(), i*height, lightPaint);
+                canvas.drawLine(0, i*height + 1, getWidth(), i*height + 1, darkPaint);
+                canvas.drawLine(i*width, 0, i*width, getHeight(),lightPaint);
+                canvas.drawLine(i*width + 1, 0, i*width + 1, getHeight(),darkPaint);
+            }
         }
 
 
@@ -72,4 +82,37 @@ public class MyView extends View{
             }
         }
     }
+
+
+    public boolean onTouchEvent(MotionEvent event){
+        if (event.getAction() != MotionEvent.ACTION_DOWN){
+            return super.onTouchEvent(event);
+        }
+
+        int selectedX = (int)(event.getX() / width);
+        int selectedY = (int)(event.getY() / height);
+
+        int used[] = game.getUsedTilesByCoor(selectedX, selectedY);
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < used.length; i++){
+            sb.append(used[i]);
+        }
+
+//        LayoutInflater layoutInflater = LayoutInflater.from(this.getContext());
+//        View layoutView = layoutInflater.inflate(R.layout.dialog, null);
+//        TextView textView = (TextView)layoutView.findViewById(R.id.usedTextId);
+//        textView.setText(sb.toString());
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+//        builder.setView(layoutView);
+////        AlertDialog dialog = builder.create();
+////        dialog.show();
+//        builder.create().show();
+        KeyDialog keyDialog = new KeyDialog(this.getContext(), used);
+        keyDialog.show();
+
+        return true;
+    }
+
+
+
 }
