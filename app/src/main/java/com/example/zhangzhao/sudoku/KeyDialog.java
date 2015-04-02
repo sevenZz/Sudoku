@@ -26,10 +26,11 @@ public class KeyDialog extends Dialog {
         findViews();
         for (int i = 0; i < used.length; i++){
             if (used[i] != 0){
-                keys[used[i]].setVisibility(View.INVISIBLE);
+                keys[used[i] - 1].setVisibility(View.INVISIBLE);
             }
         }
 
+        setListeners();
     }
 
 
@@ -43,5 +44,23 @@ public class KeyDialog extends Dialog {
         keys[6] = findViewById(R.id.keypad_7);
         keys[7] = findViewById(R.id.keypad_8);
         keys[8] = findViewById(R.id.keypad_9);
+    }
+
+    private void setListeners(){
+        for (int i = 0; i < keys.length; i++){
+            final int t = i + 1;
+            keys[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    returnResult(t);
+                }
+            });
+        }
+    }
+
+    private void returnResult(int tile){
+        myView.setSelectedTile(tile);
+
+        dismiss();
     }
 }

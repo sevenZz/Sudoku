@@ -104,4 +104,25 @@ public class Game {
     public int[] getUsedTilesByCoor(int x, int y){
         return used[x][y];
     }
+
+    protected boolean setTileIfValid(int x, int y, int value){
+        int tiles[] = getUsedTiles(x, y);
+        if (value != 0){
+            for (int tile : tiles){
+                if (tile == value)
+                    return false;
+            }
+        }
+        setTile(x, y, value);
+        calculateAllUsedTiles();
+        return true;
+    }
+
+    protected int[] getUsedTiles(int x, int y){
+        return used[x][y];
+    }
+
+    private void setTile(int x, int y, int value){
+        sudoku[y * 9 + x] = value;
+    }
 }

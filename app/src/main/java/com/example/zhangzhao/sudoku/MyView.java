@@ -113,6 +113,12 @@ public class MyView extends View{
         return true;
     }
 
+    public void setSelectedTile(int tile){
+        if(game.setTileIfValid(selectedX, selectedY, tile)){
+            invalidate();
+        }
+    }
+
 
 
 }
