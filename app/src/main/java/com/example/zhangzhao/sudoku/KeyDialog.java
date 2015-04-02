@@ -11,10 +11,12 @@ import android.view.View;
 public class KeyDialog extends Dialog {
     private final View keys[] = new View[9];
     private final int used[];
+    private MyView myView;
 
-    public KeyDialog(Context context, int[] used) {
+    public KeyDialog(Context context, int[] used, MyView myView) {
         super(context);
         this.used = used;
+        this.myView = myView;
     }
 
     @Override

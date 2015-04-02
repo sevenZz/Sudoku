@@ -18,6 +18,8 @@ public class MyView extends View{
     //用于记录单元格的宽度和高度
     private float width;
     private float height;
+    private int selectedX;
+    private int selectedY;
 
     private Game game = new Game();
     public MyView(Context context) {
@@ -89,8 +91,8 @@ public class MyView extends View{
             return super.onTouchEvent(event);
         }
 
-        int selectedX = (int)(event.getX() / width);
-        int selectedY = (int)(event.getY() / height);
+        selectedX = (int)(event.getX() / width);
+        selectedY = (int)(event.getY() / height);
 
         int used[] = game.getUsedTilesByCoor(selectedX, selectedY);
         StringBuffer sb = new StringBuffer();
@@ -107,7 +109,7 @@ public class MyView extends View{
 ////        AlertDialog dialog = builder.create();
 ////        dialog.show();
 //        builder.create().show();
-        KeyDialog keyDialog = new KeyDialog(this.getContext(), used);
+        KeyDialog keyDialog = new KeyDialog(getContext(), used, this);
         keyDialog.show();
 
         return true;
